@@ -1,0 +1,17 @@
+'sealink-qt-testing2':
+  unicorn: 'http://testing2.qt.sealink.com.au'
+  cms: 'http://testing2.cms.sealink.com.au'
+
+'sealink-qt-testing3':
+  unicorn: 'http://testing.qt.sealink.com.au'
+  cms: 'http://testing.cms.sealink.com.au'
+
+'sealink-qt-training':
+  unicorn: 'http://training.qt.sealink.com.au'
+
+'sealink-qt-product':
+  unicorn: 'http://product.qt.sealink.com.au'
+
+'sealink-qt-marketing':
+  unicorn: 'http://marketing.qt.sealink.com.au'
+
