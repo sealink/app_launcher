@@ -7,8 +7,8 @@
         %th= subapp.humanize
   %tbody
     - @apps.each_pair.each do |app, app_urls|
-      %tr(class="#{status_class(app)}")
-        %td= app.to_s.titleize
+      %tr
+        %td(class="#{status_class(app)}")= app.to_s.titleize
         %td
           - action = (simple_status(app) == 'running') ? 'stop' : 'start'
           - action_class = (simple_status(app) == 'running') ? 'btn-danger' : 'btn-success'
