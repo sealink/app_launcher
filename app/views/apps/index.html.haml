@@ -11,9 +11,9 @@
         %td(class="#{status_class(app)}")= app.to_s.titleize
         %td
           - action = (simple_status(app) == 'running') ? 'stop' : 'start'
-          = link_to url_for(:controller => 'apps', :action => action, :name => app), :class => 'btn btn-inverse btn-small' do
+          - action_class = (simple_status(app) == 'running') ? 'btn-danger' : 'btn-success'
+          = link_to url_for(:controller => 'apps', :action => action, :name => app), :class => 'btn btn-small '+action_class, :title => action do
             %i.icon-off.icon-white
-            =action
         - @subapps.each do |subapp|
           %td(class="#{status_class("#{app}-#{subapp}")}")
             - if app_urls[subapp]
