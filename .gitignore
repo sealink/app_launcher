@@ -1,5 +1,53 @@
-.bundle
-db/*.sqlite3
-log/*.log
-tmp/
-.sass-cache/
+# Tmp files to always-ignore extensions
+*.diff
+*.err
+*.orig
+*.rej
+*.swo
+*~
+*.sass-cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+*.sublime-project
+*.sublime-workspace
+/.redcar
+/nbproject
+/.project
+/.idea
+/.eclipse
+*.vi
+
+# bundler
+/vendor/ruby
+.bundle/config
+
+# rails
+db/sphinx
+*.swp
+/log
+/bin
+/tmp
+/debug.log
+
+
+# user-uploded media
+/public/uploads
+/public/system
+/public/assets
+
+# Tags file for Vim etc
+/TAGS
+/.tags
+/.tags_sorted_by_file
+/tags
+
+

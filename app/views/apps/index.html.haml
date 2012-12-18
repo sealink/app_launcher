@@ -1,16 +1,23 @@
-%table
-  %tr
-    %th App
-    %th Actions
-    - @subapps.each do |subapp|
-      %th.subapp= subapp.humanize
-  - @apps.each_pair.each do |app, app_urls|
+%table.table.table-bordered.table-hover
+  %thead
     %tr
-      %td(class="#{status_class(app)}")= app.to_s.titleize
-      %td
-        - action = (simple_status(app) == 'running') ? 'stop' : 'start'
-        = link_to action, url_for(:controller => 'apps', :action => action, :name => app)
+      %th.span5 App
+      %th Actions
       - @subapps.each do |subapp|
-        %td(class="#{status_class("#{app}-#{subapp}")}")
-          = link_to 'View', app_urls[subapp] if app_urls[subapp]
+        %th= subapp.humanize
+  %tbody
+    - @apps.each_pair.each do |app, app_urls|
+      %tr
+        %td(class="#{status_class(app)}")= app.to_s.titleize
+        %td
+          - action = (simple_status(app) == 'running') ? 'stop' : 'start'
+          = link_to url_for(:controller => 'apps', :action => action, :name => app), :class => 'btn btn-inverse btn-small' do
+            %i.icon-off.icon-white
+            =action
+        - @subapps.each do |subapp|
+          %td(class="#{status_class("#{app}-#{subapp}")}")
+            - if app_urls[subapp]
+              = link_to app_urls[subapp], :class => 'btn btn-small' do
+                %i.icon-plane
+                Launch
 
