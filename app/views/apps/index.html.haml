@@ -3,21 +3,22 @@
     %tr
       %th.span5 App
       %th Actions
-      - @subapps.each do |subapp|
+      - App::SUBAPPS.each do |subapp|
         %th= subapp.humanize
   %tbody
-    - @apps.each_pair.each do |app, app_urls|
+    - App.all.each do |app|
       %tr
-        %td(class="#{status_class(app)}")= app.to_s.titleize
+        %td(class="#{app.status_class}")= app.to_s
         %td
-          - action = (simple_status(app) == 'running') ? 'stop' : 'start'
-          - action_class = (simple_status(app) == 'running') ? 'btn-danger' : 'btn-success'
-          = link_to url_for(:controller => 'apps', :action => action, :name => app), :class => 'btn btn-small '+action_class, :title => action do
+          - action = app.running? ? 'stop' : 'start'
+          - action_class = app.running? ? 'btn-danger' : 'btn-success'
+          = link_to url_for(controller: 'apps', action: action, name: app.name), class: 'btn btn-small '+action_class, title: action do
             %i.icon-off.icon-white
-        - @subapps.each do |subapp|
-          %td(class="#{status_class("#{app}-#{subapp}")}")
-            - if app_urls[subapp]
-              = link_to app_urls[subapp], :class => 'btn btn-small' do
+        - App::SUBAPPS.each do |subapp_name|
+          - subapp = app.subapps[subapp_name.to_sym]
+          %td(class="#{app.status_class(subapp.try(:name))}")
+            - if subapp && subapp.url
+              = link_to subapp.url, class: 'btn btn-small' do
                 %i.icon-plane
                 Launch
 

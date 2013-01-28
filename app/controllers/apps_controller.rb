@@ -1,28 +1,23 @@
 class AppsController < ApplicationController
-  APPS = YAML::load(File.read("#{Rails.root}/config/apps.yml"))
-
-  def index
-    @subapps = %w(unicorn schedule solr resque cms)
-    @apps = APPS
-  end
+  before_filter :load_app, only: [:start, :stop]
 
   def start
-    action :start
+    @app.start
+    sleep 5
+    #raise @app.subapps.values.first.url.class.inspect << @app.subapps.values.first.url.inspect
+    #redirect_to "http://fantasea.testing.quicktravel.com.au" #@app.subapps.values.first.url
+    redirect_to @app.subapps.values.first.url
   end
 
   def stop
-    action :stop
+    @app.stop
+    redirect_to action: "index"
   end
-  
-  private
-    def action(action)
-      app = APPS[params[:name]]
-      Timeout::timeout(20) do
-        `sudo #{action} #{params[:name]}`
-        sleep(1)
-      end
-      redirect_to app.values.first
-    end
 
+  private
+
+  def load_app
+    @app = App.find_by_name(params[:name])
+  end
 end
 
