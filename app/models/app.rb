@@ -70,15 +70,18 @@ class Service
   
   
   def self.simple_status(name, subapp)
-    if App.find_by_name(name).script_type == "systemv"
-      if subapp == :cms
-        status = system("service unicorn status " << "#{name.gsub("qt","cms")}")
-      else
-        status = system("service #{subapp || "unicorn"} status " << "#{name}")
+    status = nil
+    Timeout::timeout(1) do
+      if App.find_by_name(name).script_type == "systemv"
+        if subapp == :cms
+          status = system("service unicorn status " << "#{name.gsub("qt","cms")}")
+        else
+          status = system("service #{subapp || "unicorn"} status " << "#{name}")
+        end
+        return status ? 'running' : 'stopped'
+      else # Upstart
+        status = `sudo status #{name}`
       end
-      return status ? 'running' : 'stopped'
-    else # Upstart
-      status = `sudo status #{name}`
     end
 
     if status['stop']
