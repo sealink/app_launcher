@@ -7,18 +7,19 @@
         %th= subapp.humanize
   %tbody
     - App.all.each do |app|
-      %tr
+      %tr(id="app-#{app.id}")
         %td(class="#{app.status_class}")= app.to_s
         %td
-          - action = app.running? ? 'stop' : 'start'
-          - action_class = app.running? ? 'btn-danger' : 'btn-success'
-          = link_to url_for(controller: 'apps', action: action, name: app.name), class: 'btn btn-small '+action_class, title: action do
-            %i.icon-off.icon-white
+          = '...'
         - App::SUBAPPS.each do |subapp_name|
           - subapp = app.subapps[subapp_name.to_sym]
-          %td(class="#{app.status_class(subapp.try(:name))}")
+          %td
             - if subapp && subapp.url
               = link_to subapp.url, class: 'btn btn-small' do
                 %i.icon-plane
                 Launch
 
+:javascript
+  var apps = #{App.all.to_json};
+  Apps.init(apps);
+  

@@ -1,29 +1,35 @@
 class App
-  attr_accessor :services, :apps, :subapps, :name, :script_type
+  attr_accessor :services, :apps, :subapps, :name, :script_type, :id
  
   APPS = YAML::load(File.read("#{Rails.root}/config/apps.yml"))
   SUBAPPS = %w(unicorn schedule solr resque cms)
 
   def self.all
-    APPS.map do |name, options|
-      App.find_by_name(name)
+    APPS.map do |id, options|
+      App.find_by_id(id)
     end
   end
 
-  def self.find_by_name(name)
-    options = APPS[name].symbolize_keys
+  def self.find_by_id(id)
+    options = APPS[id].symbolize_keys
     subapps = options.except(:color, :script_type)
-    a = App.new(options.slice(:color, :script_type).merge(name: name))
-    a.subapps = subapps.each_with_object({}){|(name, url), subapps| subapps[name]=SubApp.new(name, url) }
+    options[:name] ||= id
+    a = App.new(options.slice(:name, :color, :script_type).merge(id: id))
+    a.subapps = subapps.each_with_object({}){|(id, url), subapps| subapps[id]=SubApp.new(id, url) }
     a
   rescue
-    raise name.inspect
+    raise id.inspect
   end
  
   def initialize(options)
+    @id = options[:id]
     @name = options[:name]
     @color = options[:color]
     @script_type = options[:script_type]
+  end
+
+  def has_cms?
+    self.subapps[:cms].present?
   end
 
   def start
@@ -34,16 +40,35 @@ class App
     action("stop")
   end
 
+  def status
+    action = 'status'
+    resque   = status_for("service resque   \"#{action} #{@id}\"")
+    schedule = status_for("service schedule \"#{action} #{@id}\"")
+    qt       = status_for("service unicorn  \"#{action} #{@id}\"")
+    cms      = status_for("service unicorn  \"#{action} #{@id.gsub("qt","cms")}\"") if has_cms?
+    {resque: resque, schedule: schedule, qt: qt, cms: cms}
+  end
+def status_for(command)
+require 'open3'
+  stdin, stdout, stderr = Open3.popen3(command)
+   stderr = stderr.read
+  if stderr['Already running'] || stderr['Running with PID']
+    'running'
+  else
+    stderr
+  end
+end
+
   def action(action)
-    Timeout::timeout(300) do
+    Timeout::timeout(3000) do
       if @script_type == "systemv"
-        `service resque "#{action} #{@name}"`
-        `service schedule "#{action} #{@name}"`
-        `service unicorn "#{action} #{@name}"`
+        `service resque   "#{action} #{@id}"`
+        `service schedule "#{action} #{@id}"`
+        `service unicorn  "#{action} #{@id}"`
         # Placing this separately would be better but this is consistent with the Upstart setup
-        `service unicorn "#{action} #{@name.gsub("qt","cms")}"`
+        `service unicorn "#{action} #{@id.gsub("qt","cms")}"` if has_cms?
       else # Upstart
-        `sudo #{action} #{@name}`
+        `sudo #{action} #{@id}`
       end
     end
   end
@@ -54,14 +79,15 @@ class App
 
 
   def simple_status(subapp = nil)
-    Service.simple_status(@name, subapp)
+    Service.simple_status(@id, subapp)
   end
 
   def status_class(subapp = nil)
-    Service.status_class(@name, subapp)
+    Service.status_class(@id, subapp)
   end
+
   def to_s
-    @name.to_s.titleize
+    @name
   end
  
 end
@@ -69,18 +95,18 @@ end
 class Service
   
   
-  def self.simple_status(name, subapp)
+  def self.simple_status(id, subapp)
     status = nil
     Timeout::timeout(1) do
-      if App.find_by_name(name).script_type == "systemv"
+      if App.find_by_id(id).script_type == "systemv"
         if subapp == :cms
-          status = system("service unicorn status " << "#{name.gsub("qt","cms")}")
+          status = system("service unicorn status " << "#{id.gsub("qt","cms")}")
         else
-          status = system("service #{subapp || "unicorn"} status " << "#{name}")
+          status = system("service #{subapp || "unicorn"} status " << "#{id}")
         end
         return status ? 'running' : 'stopped'
       else # Upstart
-        status = `sudo status #{name}`
+        status = `sudo status #{id}`
       end
     end
 
@@ -95,8 +121,8 @@ class Service
     end
   end
 
-  def self.status_class(name, subapp = nil)
-    case self.simple_status(name, subapp)
+  def self.status_class(id, subapp = nil)
+    case self.simple_status(id, subapp)
     when 'stopped'; 'stopped'
     when 'running'; 'running'
     when 'starting'; 'starting'
@@ -106,18 +132,18 @@ class Service
 end
 
 class SubApp
-  attr_accessor :name, :url
+  attr_accessor :id, :url
 
-  def initialize(name, url)
-    @name = name
+  def initialize(id, url)
+    @id = id
     @url = url
   end
 
   #def simple_status
-  #  Service.simple_status(@name)
+  #  Service.simple_status(@id)
   #end
 
   #def status_class
-  #  Service.status_class(@name)
+  #  Service.status_class(@id)
   #end
 end

@@ -2,6 +2,8 @@ AppLauncher::Application.routes.draw do
   root :to => 'apps#index'
   match 'apps/start/:name' => 'apps#start'
   match 'apps/stop/:name' => 'apps#stop'
+  match 'apps/status/:name' => 'apps#status'
+  match 'apps/:id/show' => 'apps#show_app'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
