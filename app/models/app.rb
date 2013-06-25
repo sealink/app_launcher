@@ -1,3 +1,4 @@
+require 'timeout'
 class App
   attr_accessor :services, :apps, :subapps, :name, :script_type, :id
  
@@ -101,7 +102,7 @@ class Service
   
   def self.simple_status(id, subapp)
     status = nil
-    Timeout::timeout(1) do
+    ::Timeout::timeout(1) do
       if App.find_by_id(id).script_type == "systemv"
         if subapp == :cms
           status = system("service unicorn status " << "#{id.gsub("qt","cms")}")

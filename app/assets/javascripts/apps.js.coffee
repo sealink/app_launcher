@@ -9,8 +9,6 @@ class window.AppCollection
     setTimeout(@refresh, 5000)
 
   refresh: =>
-    console.log 'refreshing'
-    console.log @
     for app in @apps
       @reloadApp(app)
     @doDelayedRefresh()
