@@ -3,7 +3,9 @@
 %td
   - action = app.running? ? 'stop' : 'start'
   - action_class = app.running? ? 'btn-danger' : 'btn-success'
-  = link_to url_for(controller: 'apps', action: action, name: app.name), data: {name: app.name}, class: 'launch btn btn-small '+action_class, title: action do
+  = link_to url_for(controller: 'apps', action: action, name: app.id), 
+    data: {name: app.name}, 
+    class: 'launch btn btn-small '+action_class, title: action do
     %i.icon-off.icon-white
 - App::SUBAPPS.each do |subapp_name|
   - subapp = app.subapps[subapp_name.to_sym]

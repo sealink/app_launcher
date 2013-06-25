@@ -23,7 +23,7 @@ class AppsController < ApplicationController
   private
 
   def load_app
-    @app = App.find_by_name(params[:name])
+    @app = App.find_by_id(params[:name])
   end
 end
 
