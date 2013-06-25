@@ -3,10 +3,7 @@ class AppsController < ApplicationController
 
   def start
     @app.start
-    sleep 5
-    #raise @app.subapps.values.first.url.class.inspect << @app.subapps.values.first.url.inspect
-    #redirect_to "http://fantasea.testing.quicktravel.com.au" #@app.subapps.values.first.url
-    redirect_to @app.subapps.values.first.url
+    redirect_to action: 'index'
   end
 
   def stop
