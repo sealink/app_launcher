@@ -60,16 +60,14 @@ require 'open3'
 end
 
   def action(action)
-    Timeout::timeout(3000) do
-      if @script_type == "systemv"
-        `service resque   "#{action} #{@id}"`
-        `service schedule "#{action} #{@id}"`
-        `service unicorn  "#{action} #{@id}"`
-        # Placing this separately would be better but this is consistent with the Upstart setup
-        `service unicorn "#{action} #{@id.gsub("qt","cms")}"` if has_cms?
-      else # Upstart
-        `sudo #{action} #{@id}`
-      end
+    if @script_type == "systemv"
+      spawn_and_detach %{ service resque   "#{action} #{@id}" }
+      spawn_and_detach %{ service schedule "#{action} #{@id}" }
+      spawn_and_detach %{ service unicorn  "#{action} #{@id}" }
+      # Placing this separately would be better but this is consistent with the Upstart setup
+      spawn_and_detach %{ service unicorn "#{action} #{@id.gsub("qt","cms")}" } if has_cms?
+    else # Upstart
+      spawn_and_detach %{ sudo #{action} #{@id} }
     end
   end
 
@@ -89,8 +87,14 @@ end
   def to_s
     @name
   end
+
+  private
+  def spawn_and_detach(cmd)
+    Process.detach(Process.spawn(cmd))
+  end
  
 end
+
 
 class Service
   
