@@ -1,4 +1,9 @@
 AppLauncher::Application.configure do
+  add_paths = %w[ /usr/local/bin ]
+  ENV['PATH'] = (ENV['PATH'].split(/:/) + add_paths).uniq.select do |p|
+    File.exist?(File.expand_path(p))
+  end.join(':')
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on
