@@ -26,7 +26,7 @@ class App
     @id = options[:id]
     @name = options[:name]
     @color = options[:color]
-    @script_type = options[:script_type]
+    @script_type = options[:script_type] || 'systemv'
   end
 
   def has_cms?
