@@ -43,10 +43,10 @@ class App
 
   def status
     action = 'status'
-    resque   = status_for("service resque   \"#{action} #{@id}\"")
-    schedule = status_for("service schedule \"#{action} #{@id}\"")
-    qt       = status_for("service unicorn  \"#{action} #{@id}\"")
-    cms      = status_for("service unicorn  \"#{action} #{@id.gsub("qt","cms")}\"") if has_cms?
+    resque   = status_for("service resque-pool \"#{action} #{@id}\"")
+    schedule = status_for("service schedule    \"#{action} #{@id}\"")
+    qt       = status_for("service unicorn     \"#{action} #{@id}\"")
+    cms      = status_for("service unicorn     \"#{action} #{@id.gsub("qt","cms")}\"") if has_cms?
     {resque: resque, schedule: schedule, qt: qt, cms: cms}
   end
 def status_for(command)
@@ -62,11 +62,11 @@ end
 
   def action(action)
     if @script_type == "systemv"
-      spawn_and_detach %{ service resque   "#{action} #{@id}" }
-      spawn_and_detach %{ service schedule "#{action} #{@id}" }
-      spawn_and_detach %{ service unicorn  "#{action} #{@id}" }
+      spawn_and_detach %{ service resque-pool "#{action} #{@id}" }
+      spawn_and_detach %{ service schedule    "#{action} #{@id}" }
+      spawn_and_detach %{ service unicorn     "#{action} #{@id}" }
       # Placing this separately would be better but this is consistent with the Upstart setup
-      spawn_and_detach %{ service unicorn "#{action} #{@id.gsub("qt","cms")}" } if has_cms?
+      spawn_and_detach %{ service unicorn     "#{action} #{@id.gsub("qt","cms")}" } if has_cms?
     else # Upstart
       spawn_and_detach %{ sudo #{action} #{@id} }
     end
