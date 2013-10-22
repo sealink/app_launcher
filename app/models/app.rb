@@ -45,9 +45,10 @@ class App
     action = 'status'
     resque   = status_for("service resque-pool \"#{action} #{@id}\"")
     schedule = status_for("service schedule    \"#{action} #{@id}\"")
+    solr     = status_for("service solr        \"#{action} #{@id}\"")
     qt       = status_for("service unicorn     \"#{action} #{@id}\"")
     cms      = status_for("service unicorn     \"#{action} #{@id.gsub("qt","cms")}\"") if has_cms?
-    {resque: resque, schedule: schedule, qt: qt, cms: cms}
+    {resque: resque, schedule: schedule, solr: solr, qt: qt, cms: cms}
   end
 def status_for(command)
 require 'open3'
@@ -64,6 +65,7 @@ end
     if @script_type == "systemv"
       spawn_and_detach %{ service resque-pool "#{action} #{@id}" }
       spawn_and_detach %{ service schedule    "#{action} #{@id}" }
+      spawn_and_detach %{ service solr        "#{action} #{@id}" }
       spawn_and_detach %{ service unicorn     "#{action} #{@id}" }
       # Placing this separately would be better but this is consistent with the Upstart setup
       spawn_and_detach %{ service unicorn     "#{action} #{@id.gsub("qt","cms")}" } if has_cms?
