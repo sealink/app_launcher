@@ -64,7 +64,8 @@ class App
 
   def action(action)
     if @script_type == "systemv"
-      spawn_and_detach %{ service solr        "#{action} #{@id}" }
+      #spawn_and_detach %{ service solr        "#{action} #{@id}" }
+      solr_initialize(action)
       spawn_and_detach %{ service resque-pool "#{action} #{@id}" }
       spawn_and_detach %{ service schedule    "#{action} #{@id}" }
       spawn_and_detach %{ service unicorn     "#{action} #{@id}" }
@@ -97,6 +98,23 @@ class App
     Process.detach(Process.spawn(cmd))
   end
  
+  def solr_initialize(action)
+    # Godawful hackety hacky hack for our codependent Solr initializer
+    # On a start/restart type action, solr must be running FIRST.
+    # Otherwise, everything else will be killed.
+    require 'timeout'
+    if %w{start restart reload}.include? action
+      timer = 60
+      `service solr "#{action} #{@id}"`
+      while simple_status('solr') != 'running'
+        Timeout::timeout(timer) do
+          puts "Solr #{action} in progress..."
+        end
+      end
+    else
+      spawn_and_detach %{ service solr        "#{action} #{@id}" }
+    end
+  end
 end
 
 
