@@ -50,16 +50,17 @@ class App
     cms      = status_for("service unicorn     \"#{action} #{@id.gsub("qt","cms")}\"") if has_cms?
     {resque: resque, schedule: schedule, solr: solr, qt: qt, cms: cms}
   end
-def status_for(command)
-require 'open3'
-  stdin, stdout, stderr = Open3.popen3(command)
-   stderr = stderr.read
-  if stderr['Already running'] || stderr['Running with PID']
-    'running'
-  else
-    stderr
+
+  def status_for(command)
+    require 'open3'
+    stdin, stdout, stderr = Open3.popen3(command)
+    stderr = stderr.read
+    if stderr['Already running'] || stderr['Running with PID']
+      'running'
+    else
+      stderr
+    end
   end
-end
 
   def action(action)
     if @script_type == "systemv"
