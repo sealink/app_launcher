@@ -1,8 +1,8 @@
 require 'timeout'
 class App
   attr_accessor :services, :apps, :subapps, :name, :script_type, :id
- 
-  APPS = YAML::load(File.read("#{Rails.root}/config/apps.yml"))
+
+  APPS    = YAML::load(File.read("#{Rails.root}/config/apps.yml"))
   SUBAPPS = %w(unicorn schedule solr resque cms)
 
   def self.all
@@ -12,20 +12,22 @@ class App
   end
 
   def self.find_by_id(id)
-    options = APPS[id].symbolize_keys
-    subapps = options.except(:color, :script_type)
+    options        = APPS[id].symbolize_keys
+    subapps        = options.except(:color, :script_type)
     options[:name] ||= id
-    a = App.new(options.slice(:name, :color, :script_type).merge(id: id))
-    a.subapps = subapps.each_with_object({}){|(id, url), subapps| subapps[id]=SubApp.new(id, url) }
-    a
+    app            = App.new(options.slice(:name, :color, :script_type).merge(id: id))
+    app.subapps    = subapps.each_with_object({}) { |(id, url), subapps|
+      subapps[id] = SubApp.new(id, url)
+    }
+    app
   rescue
     raise id.inspect
   end
- 
+
   def initialize(options)
-    @id = options[:id]
-    @name = options[:name]
-    @color = options[:color]
+    @id          = options[:id]
+    @name        = options[:name]
+    @color       = options[:color]
     @script_type = options[:script_type] || 'systemv'
   end
 
@@ -42,19 +44,22 @@ class App
   end
 
   def status
-    action = 'status'
+    action   = 'status'
     solr     = status_for("service solr        \"#{action} #{@id}\"")
     resque   = status_for("service resque-pool \"#{action} #{@id}\"")
     schedule = status_for("service schedule    \"#{action} #{@id}\"")
     qt       = status_for("service unicorn     \"#{action} #{@id}\"")
-    cms      = status_for("service unicorn     \"#{action} #{@id.gsub("qt","cms")}\"") if has_cms?
-    {resque: resque, schedule: schedule, solr: solr, qt: qt, cms: cms}
+    if has_cms?
+      cms = status_for("service unicorn     \"#{action} #{@id.gsub("qt", "cms")}\"")
+    end
+
+    { resque: resque, schedule: schedule, solr: solr, qt: qt, cms: cms }
   end
 
   def status_for(command)
     require 'open3'
     stdin, stdout, stderr = Open3.popen3(command)
-    stderr = stderr.read
+    stderr                = stderr.read
     if stderr['Already running'] || stderr['Running with PID']
       'running'
     else
@@ -70,7 +75,9 @@ class App
       spawn_and_detach %{ service schedule    "#{action} #{@id}" }
       spawn_and_detach %{ service unicorn     "#{action} #{@id}" }
       # Placing this separately would be better but this is consistent with the Upstart setup
-      spawn_and_detach %{ service unicorn     "#{action} #{@id.gsub("qt","cms")}" } if has_cms?
+      if has_cms?
+        spawn_and_detach %{ service unicorn     "#{action} #{@id.gsub("qt", "cms")}" }
+      end
     else # Upstart
       spawn_and_detach %{ sudo #{action} #{@id} }
     end
@@ -94,10 +101,11 @@ class App
   end
 
   private
+
   def spawn_and_detach(cmd)
     Process.detach(Process.spawn(cmd))
   end
- 
+
   def solr_initialize(action)
     # Godawful hackety hacky hack for our codependent Solr initializer
     # On a start/restart type action, solr must be running FIRST.
