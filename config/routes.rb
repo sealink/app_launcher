@@ -1,9 +1,9 @@
 AppLauncher::Application.routes.draw do
   root :to => 'apps#index'
-  match 'apps/start/:name' => 'apps#start'
-  match 'apps/stop/:name' => 'apps#stop'
-  match 'apps/status/:name' => 'apps#status'
-  match 'apps/:id/show' => 'apps#show_app'
+  match 'apps/start/:name' => 'apps#start', via: %i(get post)
+  match 'apps/stop/:name' => 'apps#stop', via: %i(get post)
+  match 'apps/status/:name' => 'apps#status', via: %i(get post)
+  match 'apps/:id/show' => 'apps#show_app', via: %i(get post)
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

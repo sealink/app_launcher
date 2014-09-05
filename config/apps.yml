@@ -1,0 +1,24 @@
+
+'sealink_qt_testing':
+  name: 'SeaLink Testing 1 (?)'
+  unicorn: 'http://testing1.qt.sealink.com.au'
+  cms: 'http://testing1.cms.sealink.com.au'
+  adss: 'http://adss1.qt.sealink.com.au'
+  color: '#ccf'
+  script_type: 'systemv'
+
+'sealink_qt_testing2':
+  name: 'SeaLink Testing 2 (Live Equiv)'
+  unicorn: 'http://testing2.qt.sealink.com.au'
+  cms: 'http://testing2.cms.sealink.com.au'
+  adss: 'http://adss2.qt.sealink.com.au'
+  color: '#aaf'
+  script_type: 'systemv'
+
+'sealink_qt_testing3':
+  name: 'SeaLink Testing 3 (QT4)'
+  unicorn: 'http://testing3.qt.sealink.com.au'
+  cms: 'http://testing3.cms.sealink.com.au'
+  adss: 'http://adss3.qt.sealink.com.au'
+  color: '#88f'
+  script_type: 'systemv'
