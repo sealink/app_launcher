@@ -1,29 +1,32 @@
-- app_class = app.running? ? 'running' : 'stopped'
-%td(class=app_class)
-  = app.to_s
+- app_class = app.running? ? 'label-success' : 'label-important'
+%td
+  .label(class=app_class)
+    - if !app.running?
+      %i.icon-remove
+    - else
+      %i.icon-ok
+    = app.to_s
 
-%td(class=app_class)
+%td
   - action = app.running? ? 'stop' : 'start'
   - action_class = app.running? ? 'btn-danger' : 'btn-success'
   = link_to url_for(controller: 'apps', action: action, id: app.id), 
     data: {name: app.name}, 
     class: 'launch btn btn-small '+action_class, title: action do
     %i.icon-off.icon-white
+    = action.titleize
 
   = link_to app.url, class: 'btn btn-small' do
     %i.icon-plane
     Open App
 
-%td(class=app_class)
-
-  %table
-    %tr
-      - app.services.each do |service|
-        - service_status = app.services_statuses[service]
-        - service_class = service_status.running? ? 'running' : 'stopped'
-        %td(class=service_class)
-          = service.to_s
-          - if !service_status.running?
-            %br/
-            .alert.alert-error
-              = service_status.message
+%td
+  - app.services.each do |service|
+    - service_status = app.services_statuses[service]
+    - service_class = service_status.running? ? 'label-success' : 'label-important'
+    %span.label(class=service_class rel='tooltip' title="#{service_status.message}")
+      - if !service_status.running?
+        %i.icon-remove
+      - else
+        %i.icon-ok
+      = service.to_s

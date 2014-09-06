@@ -1,15 +1,24 @@
-%table.table
-  %thead
-    %tr
-      %th.span3 App
-      %th.span2 Action
-      %th.span7 Dependent Services
+.well
+  .container
+    %h1 App Launcher 2.0
 
-  %tbody
-    - @apps.each do |app|
-      %tr(id="app-#{app.id}")
-        = render partial: 'app', locals: { app: app }
+.container
+  %table.table.table-striped
+    %thead
+      %tr
+        %th.span3 App
+        %th.span2 Action
+        %th.span7 Dependent Services
+
+    %tbody
+      - @apps.each do |app|
+        %tr(id="app-#{app.id}")
+          = render partial: 'app', locals: { app: app }
 
 :javascript
   var app_ids = #{@apps.map(&:id).to_json};
   window.app_collection = new AppCollection(app_ids)
+
+  $(function() {
+    $("[rel=tooltip]").tooltip({ placement: 'right'});
+  });
