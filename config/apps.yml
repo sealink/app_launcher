@@ -1,24 +1,89 @@
-
-'sealink_qt_testing':
-  name: 'SeaLink Testing 1 (?)'
-  unicorn: 'http://testing1.qt.sealink.com.au'
-  cms: 'http://testing1.cms.sealink.com.au'
-  adss: 'http://adss1.qt.sealink.com.au'
+'kis-next-qt':
+  name: 'KIS Next QT'
   color: '#ccf'
-  script_type: 'systemv'
+  url: 'https://kis-next-qt.quicktravel.com.au'
+  services:
+    index: solr
+    workers: resque-pool
+    scheduled-jobs: scheduler
+    quicktravel: unicorn
 
-'sealink_qt_testing2':
-  name: 'SeaLink Testing 2 (Live Equiv)'
-  unicorn: 'http://testing2.qt.sealink.com.au'
-  cms: 'http://testing2.cms.sealink.com.au'
-  adss: 'http://adss2.qt.sealink.com.au'
-  color: '#aaf'
-  script_type: 'systemv'
-
-'sealink_qt_testing3':
-  name: 'SeaLink Testing 3 (QT4)'
-  unicorn: 'http://testing3.qt.sealink.com.au'
-  cms: 'http://testing3.cms.sealink.com.au'
-  adss: 'http://adss3.qt.sealink.com.au'
-  color: '#88f'
-  script_type: 'systemv'
+'kis-next-cms':
+  name: 'KIS Next SEALINK Cms'
+  color: '#ccf'
+  url: 'http://kis-next-cms.quicktravel.com.au'
+  services:
+    sealink-cms: unicorn
+#
+#'kis-current-qt':
+#  name: 'KIS Current QT'
+#  unicorn: 'https://kis-current-qt.quicktravel.com.au'
+#  cms: 'http://kis-current-cms.quicktravel.com.au'
+#  adss: 'http://adss2.quicktravel.com.au'
+#  color: '#aaf'
+#
+#'kis-legacy-qt':
+#  name: 'KIS Legacy QT'
+#  unicorn: 'https://kis-legacy-qt.quicktravel.com.au'
+#  cms: 'http://kis-legacy-cms.quicktravel.com.au'
+#  adss: 'http://adss3.quicktravel.com.au'
+#  color: '#88f'
+#
+#'kis-daily-qt':
+#  name: 'KIS Daily QT'
+#  unicorn: 'https://kis-daily-qt.quicktravel.com.au'
+#  cms: 'http://kis-daily-cms.quicktravel.com.au'
+#  adss: 'http://adss4.quicktravel.com.au'
+#  color: '#66f'
+#
+#'sealink_qt_training':
+#  name: 'SeaLink Training'
+#  unicorn: 'https://kitraining.quicktravel.com.au'
+#  #cms: 'http://training.cms.sealink.com.au'
+#  color: '#abf'
+#
+#'sealink_qt_product':
+#  name: 'SeaLink Product'
+#  unicorn: 'http://product.qt.sealink.com.au'
+#  color: '#abd'
+#
+##captain_cook_qt_test':
+## #unicorn: 'http://testing.sealink.com.au:8086'
+##  unicorn: 'http://captaincooktest.sealink.com.au'
+##  cms: 'http://captaincooktest.cms.sealink.com.au'
+#
+#'captain_cook_qt_testing1':
+#  name: 'Captain Cook 1'
+#  unicorn: 'https://cc1.quicktravel.com.au'
+#  cms: 'http://cccms1.quicktravel.com.au'
+#
+#'captain_cook_qt_testing2':
+#  name: 'Captain Cook 2'
+#  unicorn: 'https://cc2.quicktravel.com.au'
+#  cms: 'http://cccms2.quicktravel.com.au'
+#
+#'captain_cook_qt_testing3':
+#  name: 'Captain Cook 3'
+#  unicorn: 'https://cc3.quicktravel.com.au'
+#  cms: 'http://cccms3.quicktravel.com.au'
+#
+#'captain_cook_qt_testing4':
+#  name: "Captain Cook 4 - DO NOT USE. OVERWRITTEN BY LIVE DAILY."
+#  unicorn: 'https://cc4.quicktravel.com.au'
+#  cms: 'http://cccms4.quicktravel.com.au'
+#
+##'captain-cook-qt':
+##  #unicorn: 'http://testing.sealink.com.au:8088'
+##  unicorn: 'http://captaincookqt.sealink.com.au'
+#
+#'sealink_qld_qt_test':
+#  name: 'SeaLink QLD'
+#  #unicorn: 'http://testing.sealink.com.au:8082'
+#  unicorn: 'https://qld1.quicktravel.com.au'
+#
+#'murray_princess_qt_test':
+#  name: 'Murray Princess'
+#  unicorn: 'https://mp1.quicktravel.com.au'
+#
+##'fantasea_qt_testing':
+##  unicorn: 'http://fantasea.testing.quicktravel.com.au'

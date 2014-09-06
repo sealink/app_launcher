@@ -2,19 +2,19 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 class window.AppCollection 
-  constructor: (@apps) ->
+  constructor: (@app_ids) ->
     @refresh()
 
   doDelayedRefresh: ->
     setTimeout(@refresh, 5000)
 
   refresh: =>
-    for app in @apps
-      @reloadApp(app)
+    for app_id in app_ids
+      @reloadApp(app_id)
     @doDelayedRefresh()
 
 
-  reloadApp: (app) ->
-    $.get "/apps/#{app.id}/show", (response) ->
-      $("#app-#{app.id}").html(response)
+  reloadApp: (app_id) ->
+    $.get "/apps/#{app_id}/show", (response) ->
+      $("#app-#{app_id}").html(response)
   

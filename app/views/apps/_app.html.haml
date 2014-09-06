@@ -1,17 +1,29 @@
-- app = @app
-%td(class="#{app.status_class}")= app.to_s
-%td
+- app_class = app.running? ? 'running' : 'stopped'
+%td(class=app_class)
+  = app.to_s
+
+%td(class=app_class)
   - action = app.running? ? 'stop' : 'start'
   - action_class = app.running? ? 'btn-danger' : 'btn-success'
-  = link_to url_for(controller: 'apps', action: action, name: app.id), 
+  = link_to url_for(controller: 'apps', action: action, id: app.id), 
     data: {name: app.name}, 
     class: 'launch btn btn-small '+action_class, title: action do
     %i.icon-off.icon-white
-- App::SUBAPPS.each do |subapp_name|
-  - subapp = app.subapps[subapp_name.to_sym]
-  %td(class="#{app.status_class(subapp.try(:id))}")
-    - if subapp && subapp.url
-      = link_to subapp.url, class: 'btn btn-small' do
-        %i.icon-plane
-        Launch
 
+  = link_to app.url, class: 'btn btn-small' do
+    %i.icon-plane
+    Open App
+
+%td(class=app_class)
+
+  %table
+    %tr
+      - app.services.each do |service|
+        - service_status = app.services_statuses[service]
+        - service_class = service_status.running? ? 'running' : 'stopped'
+        %td(class=service_class)
+          = service.to_s
+          - if !service_status.running?
+            %br/
+            .alert.alert-error
+              = service_status.message

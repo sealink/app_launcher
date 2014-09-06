@@ -1,6 +1,10 @@
 class AppsController < ApplicationController
   before_filter :load_app, only: [:start, :stop, :status]
 
+  def index
+    @apps = AppRepository.all
+  end
+
   def start
     @app.start
     redirect_to action: 'index'
@@ -16,14 +20,14 @@ class AppsController < ApplicationController
   end
 
   def show_app
-    @app = App.find_by_id(params[:id])
-    render partial: 'app', layout: false
+    app = AppRepository.find_by_id(params[:id])
+    render partial: 'app', locals: { app: app }
   end
 
   private
 
   def load_app
-    @app = App.find_by_id(params[:name])
+    @app = AppRepository.find_by_id(params[:id])
   end
 end
 
