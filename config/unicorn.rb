@@ -22,7 +22,7 @@ working_directory current_path
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
-listen "#{shared_path}/sockets/unicorn.sock", :backlog => 1024
+listen "#{shared_path}/tmp/sockets/unicorn.sock", :backlog => 1024
 listen unicorn_port.to_i  # Add :tcp_nopush => true to force FULL response, not partial streaming
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
