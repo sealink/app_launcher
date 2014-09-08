@@ -1,25 +1,24 @@
-%table.table
-  %thead
-    %tr
-      %th.span5 App
-      %th Actions
-      - App::SUBAPPS.each do |subapp|
-        %th= subapp.humanize
-  %tbody
-    - App.all.each do |app|
-      %tr(id="app-#{app.id}")
-        %td(class="#{app.status_class}")= app.to_s
-        %td
-          = '...'
-        - App::SUBAPPS.each do |subapp_name|
-          - subapp = app.subapps[subapp_name.to_sym]
-          %td
-            - if subapp && subapp.url
-              = link_to subapp.url, class: 'btn btn-small' do
-                %i.icon-plane
-                Launch
+.well
+  .container
+    %h1 App Launcher 2.0
+
+.container
+  %table.table.table-striped
+    %thead
+      %tr
+        %th.span3 App
+        %th.span2 Action
+        %th.span7 Dependent Services
+
+    %tbody
+      - @apps.each do |app|
+        %tr(id="app-#{app.id}")
+          = render partial: 'app', locals: { app: app }
 
 :javascript
-  var apps = #{App.all.to_json};
-  window.app_collection = new AppCollection(apps)
-  
+  var app_ids = #{@apps.map(&:id).to_json};
+  window.app_collection = new AppCollection(app_ids)
+
+  $(function() {
+    $("[rel=tooltip]").tooltip({ placement: 'right'});
+  });

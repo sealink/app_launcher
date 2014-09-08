@@ -1,79 +1,16 @@
-##
-##    sealink testing
-##
+'kis-next-qt':
+  name: 'KIS Next QT'
+  color: '#ccf'
+  url: 'https://kis-next-qt.quicktravel.com.au'
+  services:
+    index: solr
+    workers: resque-pool
+    scheduled-jobs: scheduler
+    quicktravel: unicorn
 
-'sealink-qt-testing':
-  unicorn: 'http://testing1.qt.sealink.com.au'
-  cms: 'http://testing1.cms.sealink.com.au'
-  adss: 'http://adss1.qt.sealink.com.au'
-  color: '#999'
-
-'sealink-qt-testing2':
-  unicorn: 'http://testing2.qt.sealink.com.au'
-  cms: 'http://testing2.cms.sealink.com.au'
-  adss: 'http://adss2.qt.sealink.com.au'
-  color: '#999'
-
-'sealink-qt-testing3':
-  unicorn: 'http://testing3.qt.sealink.com.au'
-  cms: 'http://testing3.cms.sealink.com.au'
-  adss: 'http://adss3.qt.sealink.com.au'
-  color: '#999'
-
-'sealink-qt-testing4':
-  unicorn: 'http://testing4.qt.sealink.com.au'
-  cms: 'http://testing4.cms.sealink.com.au'
-  adss: 'http://adss4.qt.sealink.com.au'
-  color: '#999'
-
-##
-##    sealink other
-##
-
-'sealink-qt-training':
-  unicorn: 'http://training.qt.sealink.com.au'
-  color: '#777'
-
-'sealink-qt-product':
-  unicorn: 'http://product.qt.sealink.com.au'
-  color: '#777'
-
-'sealink-qt-marketing':
-  unicorn: 'http://marketing.qt.sealink.com.au'
-  color: '#777'
-
-##
-##    quicktravel-test
-##
-
-'captain-cook-qt-test':
-  #unicorn: 'http://testing.sealink.com.au:8086'
-  unicorn: 'http://captaincooktest.sealink.com.au'
-  cms: 'http://captaincooktest.cms.sealink.com.au'
-
-#'captain-cook-qt':
-#  #unicorn: 'http://testing.sealink.com.au:8088'
-#  unicorn: 'http://captaincookqt.sealink.com.au'
-
-'sealink-qld-qt-test':
-  #unicorn: 'http://testing.sealink.com.au:8082'
-  unicorn: 'http://sealinkqldtest.sealink.com.au'
-
-'murray-princess-qt-test':
-  unicorn: 'http://testing.sealink.com.au:8087'
-
-'fantasea-qt-testing':
-  unicorn: 'http://fantasea.testing.quicktravel.com.au'
-
-
-##
-##    quicktravel-finance
-##
-
-'sealink-qt-finance1':
-  unicorn: 'http://finance1.qt.sealink.com.au'
-  color: '#ddd'
-
-'sealink-qt-finance2':
-  unicorn: 'http://finance2.qt.sealink.com.au'
-  color: '#ddd'
+'kis-next-cms':
+  name: 'KIS Next SEALINK Cms'
+  color: '#ccf'
+  url: 'http://kis-next-cms.quicktravel.com.au'
+  services:
+    sealink-cms: unicorn

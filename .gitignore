@@ -1,3 +1,6 @@
+# Config
+config/apps.yml
+
 # Tmp files to always-ignore extensions
 *.diff
 *.err
@@ -38,7 +41,6 @@ db/sphinx
 /tmp
 /debug.log
 
-
 # user-uploded media
 /public/uploads
 /public/system
@@ -49,5 +51,4 @@ db/sphinx
 /.tags
 /.tags_sorted_by_file
 /tags
-
 
