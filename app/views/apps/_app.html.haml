@@ -8,7 +8,7 @@
     Open App
   &nbsp;
   - app_class = app.running? ? 'badge-success' : 'badge-important'
-  - app_icon = (app.running? ? 'icon-remove' : 'icon-ok')
+  - app_icon = (app.running? ? 'icon-ok' : 'icon-remove' )
   .badge(class=app_class)
     %i.icon-white(class=app_icon)
   = app.to_s
