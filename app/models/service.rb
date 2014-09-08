@@ -36,7 +36,7 @@ class Service
   private
 
   def cmd_string(action)
-    %{ service #{@id} "#{action} #{@app_id}" }
+    %{ service #{@service_type} "#{action} #{@app_id}" }
   end
 
   def perform(action)
