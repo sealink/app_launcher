@@ -12,7 +12,7 @@ class AppsController < ApplicationController
 
   def stop
     @app.stop
-    redirect_to action: "index"
+    redirect_to action: 'index'
   end
 
   def status

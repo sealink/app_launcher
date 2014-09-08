@@ -1,10 +1,16 @@
 - app_class = app.running? ? 'label-success' : 'label-important'
 %td
+  - url_attrs = if app.running?
+    - {href: app.url}
+  - else
+    - {disabled: 'disabled', href: "javascript:return false;"}
+  %a.btn.btn-small{url_attrs}
+    %i.icon-plane
+    Open App
+
+  - app_icon = (app.running? ? 'icon-remove' : 'icon-ok')
   .label(class=app_class)
-    - if !app.running?
-      %i.icon-remove
-    - else
-      %i.icon-ok
+    %i(class=app_icon)
     = app.to_s
 
 %td
@@ -16,9 +22,6 @@
     %i.icon-off.icon-white
     = action.titleize
 
-  = link_to app.url, class: 'btn btn-small' do
-    %i.icon-plane
-    Open App
 
 %td
   - app.services.each do |service|
