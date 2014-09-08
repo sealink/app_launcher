@@ -14,10 +14,12 @@ class Service
   end
 
   def start
+    return if status.running?
     perform('start')
   end
 
   def stop
+    return if !status.running?
     perform('stop')
   end
 
