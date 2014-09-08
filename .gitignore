@@ -3,6 +3,8 @@ config/apps.yml
 config/secrets.yml
 
 # Tmp files to always-ignore extensions
+./log
+./tmp
 *.diff
 *.err
 *.orig
