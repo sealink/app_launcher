@@ -1,4 +1,3 @@
-- app_class = app.running? ? 'label-success' : 'label-important'
 %td
   - url_attrs = if app.running?
     - {href: app.url}
@@ -7,21 +6,31 @@
   %a.btn.btn-small{url_attrs}
     %i.icon-plane
     Open App
-
+  &nbsp;
+  - app_class = app.running? ? 'badge-success' : 'badge-important'
   - app_icon = (app.running? ? 'icon-remove' : 'icon-ok')
-  .label(class=app_class)
-    %i(class=app_icon)
-    = app.to_s
+  .badge(class=app_class)
+    %i.icon-white(class=app_icon)
+  = app.to_s
 
 %td
-  - action = app.running? ? 'stop' : 'start'
-  - action_class = app.running? ? 'btn-danger' : 'btn-success'
-  = link_to url_for(controller: 'apps', action: action, id: app.id), 
-    data: {name: app.name}, 
-    class: 'launch btn btn-small '+action_class, title: action do
+  - start_attrs = {title: 'Start', data: {name: app.name}}
+  - if !app.running?
+    - start_attrs[:href] = url_for(controller: 'apps', action: 'start', id: app.id)
+  - else
+    - start_attrs[:disabled] = 'disabled'
+  %a.btn.btn-small.btn-success{start_attrs}
     %i.icon-off.icon-white
-    = action.titleize
+    Start
 
+  - stop_attrs = {title: 'Stop', data: {name: app.name}}
+  - if app.any_running?
+    - stop_attrs[:href] = url_for(controller: 'apps', action: 'stop', id: app.id)
+  - else
+    - stop_attrs[:disabled] = 'disabled'
+  %a.btn.btn-small.btn-danger{stop_attrs}
+    %i.icon-off.icon-white
+    Stop
 
 %td
   - app.services.each do |service|
