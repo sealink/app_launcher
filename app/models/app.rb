@@ -26,11 +26,11 @@ class App
   end
 
   def running?
-    if services.empty?
-      false
-    else
-      services_statuses.values.all?(&:running?)
-    end
+    services_statuses.values.all?(&:running?)
+  end
+
+  def any_running?
+    services_statuses.values.any?(&:running?)
   end
 
   def services_statuses
