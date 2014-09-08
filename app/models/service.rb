@@ -1,7 +1,7 @@
 class Service
   attr_reader :id
 
-  ALLOWED_TYPES = %w(solr resque-pool scheduler unicorn)
+  ALLOWED_TYPES = %w(solr resque-pool schedule unicorn)
 
   def initialize(app_id, id, service_type)
     if !ALLOWED_TYPES.include?(service_type)

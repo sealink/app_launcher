@@ -5,7 +5,7 @@
   services:
     index: solr
     workers: resque-pool
-    scheduled-jobs: scheduler
+    scheduled-jobs: schedule
     quicktravel: unicorn
 
 'kis-next-cms':
