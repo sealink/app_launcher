@@ -1,11 +1,12 @@
 class App
-  attr_reader :id, :name, :url, :color
+  attr_reader :id, :name, :url, :color, :category
 
   def initialize(id, options)
-    @id      = id
-    @name    = options.fetch(:name, @id)
-    @url     = options.fetch(:url, '')
-    @color   = options[:color]
+    @id       = id
+    @name     = options.fetch(:name, @id)
+    @url      = options.fetch(:url, '')
+    @color    = options[:color]
+    @category = options.fetch(:category, 'Uncategorized')
     @services = {}
   end
 
