@@ -5,6 +5,7 @@ gem 'rails', '4.1.5'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets, :development do
+  gem 'bootstrap-sass'
   gem 'sass-rails', '~> 4.0.3'
   gem 'coffee-rails', '~> 4.0.0'
   gem 'therubyracer',  platforms: :ruby

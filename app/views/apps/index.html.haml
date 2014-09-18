@@ -1,28 +1,38 @@
-.well
-  .container
-    %h1 App Launcher 2.0
-
 .container
-  %ul.nav.nav-tabs
-    - @apps.group_by(&:category).each do |category, apps|
-      %li
-        %a{href: "##{category}", data: { toggle: 'tab' }}
-          = category.titlecase
+  %nav.navbar.navbar-default(role='navigation')
+    .container-fluid
+      .navbar-header
+        %a.navbar-brand App Launcher 2.0
 
-  .tab-content
-    - @apps.group_by(&:category).each do |category, apps|
-      .tab-pane.container(id=category)
-        %table.table.table-striped
-          %thead
-            %tr
-              %th App
-              %th Actions
-              %th Dependent Services
+      .collapse.navbar-collapse
+        %ul.nav.navbar-nav
+          - @apps.group_by(&:category).each do |category, apps|
+            %li
+              %a{href: "##{category}", data: { toggle: 'tab' }}
+                = category.titlecase
 
-          %tbody
-            - apps.each do |app|
-              %tr(id="app-#{app.id}")
-                = render partial: 'app', locals: { app: app }
+.container.tab-content
+  .tab-pane.active
+    .jumbotron
+      %h1
+        %span.glyphicon.glyphicon-thumbs-up
+        Choose your
+        %span.icon-white.glyphicon.glyphicon-plane
+        Launchpad
+
+  - @apps.group_by(&:category).each do |category, apps|
+    .tab-pane(id=category)
+      %table.table.table-striped
+        %thead
+          %tr
+            %th App
+            %th Actions
+            %th Dependent Services
+
+        %tbody
+          - apps.each do |app|
+            %tr(id="app-#{app.id}")
+              = render partial: 'app', locals: { app: app }
 
 :javascript
   var app_ids = #{@apps.map(&:id).to_json};
