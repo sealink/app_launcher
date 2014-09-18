@@ -7,11 +7,15 @@
       .collapse.navbar-collapse
         %ul.nav.navbar-nav
           %li
-            %a.js-tab-btn{:href => "#start"} Start
+            %a.js-tab-btn{href: "#start", data: { toggle: 'tab' }} Start
           - @apps.group_by(&:category).each do |category, apps|
             %li
               %a.js-tab-btn{href: "##{category}", data: { toggle: 'tab' }}
                 = category.titlecase
+        .nav.navbar-nav.navbar-right
+          .navbar-btn.checkbox
+            %label.navbar-link
+              %input.js-auto-refresh(type='checkbox' checked='checked') Auto refresh?
 
   .tab-content
     .tab-pane.active#start
@@ -31,9 +35,9 @@
 
           %tbody
             - apps.each do |app|
-              %tr(id="app-#{app.id}")
+              %tr.js-app-row(id="app-#{app.id}")
                 = render partial: 'app', locals: { app: app }
 
 :javascript
-  var app_ids = #{@apps.map(&:id).to_json};
-  window.app_collection = new AppCollection(app_ids)
+  var appIds = #{@apps.map(&:id).to_json};
+  $(function() { AppLauncherController.start(appIds); });
