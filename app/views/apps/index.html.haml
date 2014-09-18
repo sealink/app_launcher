@@ -1,4 +1,4 @@
-.container
+.container.app-launcher
   %nav.navbar.navbar-default(role='navigation')
     .container-fluid
       .navbar-header
@@ -6,38 +6,34 @@
 
       .collapse.navbar-collapse
         %ul.nav.navbar-nav
+          %li
+            %a.js-tab-btn{:href => "#start"} Start
           - @apps.group_by(&:category).each do |category, apps|
             %li
-              %a{href: "##{category}", data: { toggle: 'tab' }}
+              %a.js-tab-btn{href: "##{category}", data: { toggle: 'tab' }}
                 = category.titlecase
 
-.container.tab-content
-  .tab-pane.active
-    .jumbotron
+  .tab-content
+    .tab-pane.active#start
       %h1
-        %span.glyphicon.glyphicon-thumbs-up
         Choose your
         %span.icon-white.glyphicon.glyphicon-plane
         Launchpad
 
-  - @apps.group_by(&:category).each do |category, apps|
-    .tab-pane(id=category)
-      %table.table.table-striped
-        %thead
-          %tr
-            %th App
-            %th Actions
-            %th Dependent Services
+    - @apps.group_by(&:category).each do |category, apps|
+      .tab-pane(id=category)
+        %table.table.table-striped.app-table-list
+          %thead
+            %tr
+              %th App
+              %th Actions
+              %th Dependent Services
 
-        %tbody
-          - apps.each do |app|
-            %tr(id="app-#{app.id}")
-              = render partial: 'app', locals: { app: app }
+          %tbody
+            - apps.each do |app|
+              %tr(id="app-#{app.id}")
+                = render partial: 'app', locals: { app: app }
 
 :javascript
   var app_ids = #{@apps.map(&:id).to_json};
   window.app_collection = new AppCollection(app_ids)
-
-  $(function() {
-    $('.nav-tabs a:first').tab('show');
-  });

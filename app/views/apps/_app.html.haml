@@ -8,26 +8,26 @@
   &nbsp;
   - app_class = (app.running? ? 'success' : 'danger')
   - app_icon = (app.running? ? 'glyphicon-ok' : 'glyphicon-exclamation-sign' )
-  .badge(class=app_class)
+  %span.badge.inline-middle(class=app_class)
     %span.icon-white.glyphicon(class=app_icon)
   = app.to_s
 
 %td
-  - start_attrs = {title: 'Start', data: {name: app.name}}
+  - start_attrs = {title: 'Start', data: {name: app.name, 'loading-text' => "Booting up..."}}
   - if !app.running?
     - start_attrs[:href] = url_for(controller: 'apps', action: 'start', id: app.id)
   - else
     - start_attrs[:disabled] = 'disabled'
-  %a.btn.btn-small.btn-success{start_attrs}
+  %a.btn.btn-small.btn-success.start-btn{start_attrs}
     %span.glyphicon.glyphicon-off.icon-white
     Start
 
-  - stop_attrs = {title: 'Stop', data: {name: app.name}}
+  - stop_attrs = {title: 'Stop', data: {name: app.name, 'loading-text' => "Shutting down..." }}
   - if app.any_running?
     - stop_attrs[:href] = url_for(controller: 'apps', action: 'stop', id: app.id)
   - else
     - stop_attrs[:disabled] = 'disabled'
-  %a.btn.btn-small.btn-danger{stop_attrs}
+  %a.btn.btn-small.btn-danger.stop-btn{stop_attrs}
     %span.glyphicon.glyphicon-off.icon-white
     Stop
 
@@ -35,7 +35,7 @@
   - app.services.each do |service|
     - service_status = app.services_statuses[service]
     - service_class = service_status.running? ? 'label-success' : 'label-danger'
-    %span.label(class=service_class rel='tooltip' title="#{service_status.message}")
+    %span.label.dependent-service(class=service_class data-toggle="tooltip" title="#{service_status.message}")
       - if !service_status.running?
         %span.glyphicon.glyphicon-exclamation-sign.icon-white
       - else
