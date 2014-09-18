@@ -3,22 +3,31 @@
     %h1 App Launcher 2.0
 
 .container
-  %table.table.table-striped
-    %thead
-      %tr
-        %th App
-        %th Actions
-        %th Dependent Services
+  %ul.nav.nav-tabs
+    - @apps.group_by(&:category).each do |category, apps|
+      %li
+        %a{href: "##{category}", data: { toggle: 'tab' }}
+          = category.titlecase
 
-    %tbody
-      - @apps.each do |app|
-        %tr(id="app-#{app.id}")
-          = render partial: 'app', locals: { app: app }
+  .tab-content
+    - @apps.group_by(&:category).each do |category, apps|
+      .tab-pane.container(id=category)
+        %table.table.table-striped
+          %thead
+            %tr
+              %th App
+              %th Actions
+              %th Dependent Services
+
+          %tbody
+            - apps.each do |app|
+              %tr(id="app-#{app.id}")
+                = render partial: 'app', locals: { app: app }
 
 :javascript
   var app_ids = #{@apps.map(&:id).to_json};
   window.app_collection = new AppCollection(app_ids)
 
   $(function() {
-    $("[rel=tooltip]").tooltip({ placement: 'right'});
+    $('.nav-tabs a:first').tab('show');
   });

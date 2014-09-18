@@ -25,20 +25,6 @@ class AppRepository
     YAML::load_file(@config_file)
   end
 
-  # OLD FORMAT:
-  # Each app included multiple apps, some were services, some user-facing apps:
-  # 'kis-next-qt':
-  #   name: 'KIS Next QT'
-  #   unicorn: 'https://kis-next-qt.quicktravel.com.au'
-  #   cms: 'http://kis-next-cms.quicktravel.com.au'
-  #   adss: 'http://adss1.quicktravel.com.au'
-  #   color: '#ccf'
-  #
-  # The code is defective, ignoring these totally, EXCEPT for unicorn & cms
-  # ...and has to treat special cases everywhere due to 'cms' being a user
-  # facing app with it's own id.
-  #
-  # NEW FORMAT:
   # Each app is one user-facing app, and contains only information & services
   #
   # 'kis-next-qt':
@@ -60,7 +46,7 @@ class AppRepository
   def configure_app(id, raw_config)
     config = raw_config.symbolize_keys
 
-    app = App.new(id, config.slice(:name, :url, :color))
+    app = App.new(id, config.slice(:name, :url, :color, :category))
     config.fetch(:services, []).each do |service_id, service_type|
       app.add_service(service_id, service_type)
     end

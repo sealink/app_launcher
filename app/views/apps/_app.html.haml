@@ -1,8 +1,7 @@
 %td
-  - url_attrs = if app.running?
-    - {href: app.url}
-  - else
-    - {disabled: 'disabled', href: "javascript:return false;"}
+  - url_attrs = {href: app.url}
+  - if !app.running?
+    - url_attrs['disabled'] = 'disabled'
   %a.btn.btn-small{url_attrs}
     %i.icon-plane
     Open App
