@@ -2,14 +2,14 @@
   - url_attrs = {href: app.url}
   - if !app.running?
     - url_attrs['disabled'] = 'disabled'
-  %a.btn.btn-small{url_attrs}
-    %i.icon-plane
+  %a.btn.btn-default{url_attrs}
+    %span.icon-white.glyphicon.glyphicon-plane
     Open App
   &nbsp;
-  - app_class = app.running? ? 'badge-success' : 'badge-important'
-  - app_icon = (app.running? ? 'icon-ok' : 'icon-remove' )
+  - app_class = (app.running? ? 'success' : 'danger')
+  - app_icon = (app.running? ? 'glyphicon-ok' : 'glyphicon-exclamation-sign' )
   .badge(class=app_class)
-    %i.icon-white(class=app_icon)
+    %span.icon-white.glyphicon(class=app_icon)
   = app.to_s
 
 %td
@@ -19,7 +19,7 @@
   - else
     - start_attrs[:disabled] = 'disabled'
   %a.btn.btn-small.btn-success{start_attrs}
-    %i.icon-off.icon-white
+    %span.glyphicon.glyphicon-off.icon-white
     Start
 
   - stop_attrs = {title: 'Stop', data: {name: app.name}}
@@ -28,16 +28,16 @@
   - else
     - stop_attrs[:disabled] = 'disabled'
   %a.btn.btn-small.btn-danger{stop_attrs}
-    %i.icon-off.icon-white
+    %span.glyphicon.glyphicon-off.icon-white
     Stop
 
 %td
   - app.services.each do |service|
     - service_status = app.services_statuses[service]
-    - service_class = service_status.running? ? 'label-success' : 'label-important'
+    - service_class = service_status.running? ? 'label-success' : 'label-danger'
     %span.label(class=service_class rel='tooltip' title="#{service_status.message}")
       - if !service_status.running?
-        %i.icon-remove
+        %span.glyphicon.glyphicon-exclamation-sign.icon-white
       - else
-        %i.icon-ok
+        %span.glyphicon.glyphicon-ok.icon-white
       = service.to_s
